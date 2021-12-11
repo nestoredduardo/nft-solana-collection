@@ -3,6 +3,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { Program, Provider, web3 } from '@project-serum/anchor'
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token'
 import { programs } from '@metaplex/js'
+import { Link } from 'react-router-dom'
 
 //Redux
 import { connect } from 'react-redux'
@@ -15,6 +16,7 @@ import {
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
 } from './helpers'
 
+//Layout
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/layout'
 
@@ -335,6 +337,7 @@ const CandyMachine = ({
     )
 
     if (data.length !== 0) {
+      setMints([])
       for (const mint of data) {
         // Get URI
         const response = await fetch(mint.data.uri)
@@ -342,9 +345,12 @@ const CandyMachine = ({
         console.log('Past Minted NFT', mint)
 
         // Get image URI
-        if (!mints.find((mint) => mint === parse.image)) {
+        /* if (!mints.find((mint) => mint === parse.image)) {
           setMints((prevState) => [...prevState, parse.image])
-        }
+        } */
+        const newMints = [...mints, parse.image]
+        console.log(parse)
+        setMints(newMints)
       }
       getMintedPunks(mints)
     }
@@ -389,7 +395,9 @@ const CandyMachine = ({
           </Box>
         )}
 
-        <Button>Galería</Button>
+        <Button>
+          <Link to="/gallery">Galería</Link>{' '}
+        </Button>
       </HStack>
 
       {machineStats && (

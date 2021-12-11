@@ -10,6 +10,7 @@ import {
 import { Badge, Box } from '@chakra-ui/layout'
 import { connect } from 'react-redux'
 import { HamburgerIcon } from '@chakra-ui/icons'
+import { Link } from 'react-router-dom'
 
 import { connectWallet } from '../redux/punks/punksActions'
 
@@ -31,8 +32,12 @@ const Header = ({ connectWallet, walletAddress }) => {
           variant="outline"
         />
         <MenuList>
-          <MenuItem>Home</MenuItem>
-          <MenuItem>Punks</MenuItem>
+          <MenuItem>
+            <Link to="/">Home</Link>{' '}
+          </MenuItem>
+          <MenuItem>
+            <Link to="/gallery">Punks</Link>
+          </MenuItem>
         </MenuList>
       </Menu>
       <Text ml="4" fontSize="1.2rem">
