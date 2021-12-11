@@ -7,7 +7,14 @@ import { Link } from 'react-router-dom'
 
 //Redux
 import { connect } from 'react-redux'
-import { connectWallet, getMintedPunks } from '../redux/punks/punksActions'
+import {
+  connectWallet,
+  getMintedPunks,
+  successMintedPunks,
+  setIsMinting,
+  errorMinting,
+  successMinting,
+} from '../redux/punks/punksActions'
 
 import './CandyMachine.css'
 import {
@@ -26,9 +33,9 @@ const {
 
 const config = new web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_CONFIG)
 const { SystemProgram } = web3
-const opts = {
+/* const opts = {
   preflightCommitment: 'processed',
-}
+} */
 
 const MAX_NAME_LENGTH = 32
 const MAX_URI_LENGTH = 200
@@ -38,8 +45,12 @@ const MAX_CREATOR_LEN = 32 + 1 + 1
 const CandyMachine = ({
   walletAddress,
   user,
+  isMinting,
   connectWallet,
   getMintedPunks,
+  successMintedPunks,
+  setIsMinting,
+  errorMinting,
 }) => {
   // Actions
   const fetchHashTable = async (hash, metadataEnabled) => {
@@ -125,6 +136,7 @@ const CandyMachine = ({
 
   const mintToken = async () => {
     try {
+      setIsMinting()
       const mint = web3.Keypair.generate()
       const token = await getTokenWallet(
         walletAddress.publicKey,
@@ -209,6 +221,7 @@ const CandyMachine = ({
             const { result } = notification
             if (!result.err) {
               console.log('NFT Minted!')
+              successMinting('Candy Punk Minted, míralo en tu wallet 😎')
             }
           }
         },
@@ -231,6 +244,8 @@ const CandyMachine = ({
           message = `Minting period hasn't started yet.`
         }
       }
+
+      errorMinting(message)
 
       console.warn(message)
     }
@@ -267,7 +282,6 @@ const CandyMachine = ({
   }
 
   const [machineStats, setMachineStats] = useState(null)
-  const [mints, setMints] = useState([])
 
   useEffect(() => {
     getCandyMachineState()
@@ -331,13 +345,15 @@ const CandyMachine = ({
       goLiveDateTimeString,
     })
 
+    getMintedPunks()
+
     const data = await fetchHashTable(
       process.env.REACT_APP_CANDY_MACHINE_ID,
       true
     )
 
     if (data.length !== 0) {
-      setMints([])
+      let newMints = []
       for (const mint of data) {
         // Get URI
         const response = await fetch(mint.data.uri)
@@ -345,14 +361,11 @@ const CandyMachine = ({
         console.log('Past Minted NFT', mint)
 
         // Get image URI
-        /* if (!mints.find((mint) => mint === parse.image)) {
-          setMints((prevState) => [...prevState, parse.image])
-        } */
-        const newMints = [...mints, parse.image]
-        console.log(parse)
-        setMints(newMints)
+        if (!newMints.find((mint) => mint === parse.image)) {
+          newMints.push(parse.image)
+        }
       }
-      getMintedPunks(mints)
+      successMintedPunks(newMints)
     }
   }
 
@@ -370,6 +383,7 @@ const CandyMachine = ({
               borderColor: '#bec3c9',
             }}
             onClick={mintToken}
+            disabled={isMinting}
           >
             Obtén tu Candy Punk
           </Box>
@@ -407,13 +421,17 @@ const CandyMachine = ({
   )
 }
 
-const mapStateToProps = ({ walletAddress }) => {
-  return { user: walletAddress }
+const mapStateToProps = ({ walletAddress, isMinting }) => {
+  return { user: walletAddress, isMinting }
 }
 
 const mapDispatchToProps = {
   connectWallet,
   getMintedPunks,
+  setIsMinting,
+  errorMinting,
+  successMinting,
+  successMintedPunks,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CandyMachine)

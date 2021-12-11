@@ -6,6 +6,10 @@ import {
   CONNECT_WALLET_ERROR,
   CONNECT_WALLET_SUCCESS,
   GET_MINTED_PUNKS,
+  GET_MINTED_PUNKS_SUCCESS,
+  MINT_PUNK,
+  MINT_PUNK_SUCCESS,
+  MINT_PUNK_ERROR,
 } from './punksType'
 
 const initialState = {
@@ -13,6 +17,9 @@ const initialState = {
   connecting: false,
   errorConnecting: false,
   mintedPunks: [],
+  loadingPunks: false,
+  isminting: false,
+  mintMessage: '',
 }
 
 const reducer = (state = initialState, action) => {
@@ -30,7 +37,15 @@ const reducer = (state = initialState, action) => {
     case CONNECT_WALLET_ERROR:
       return { ...state, connecting: false, errorConnecting: true }
     case GET_MINTED_PUNKS:
-      return { ...state, mintedPunks: action.payload }
+      return { ...state, loadingPunks: true }
+    case GET_MINTED_PUNKS_SUCCESS:
+      return { ...state, loadingPunks: false, mintedPunks: action.payload }
+    case MINT_PUNK:
+      return { ...state, isminting: true }
+    case MINT_PUNK_SUCCESS:
+      return { ...state, isminting: false, mintMessage: action.payload }
+    case MINT_PUNK_ERROR:
+      return { ...state, isminting: false, mintMessage: action.payload }
     default:
       return state
   }

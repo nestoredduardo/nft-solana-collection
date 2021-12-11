@@ -5,7 +5,11 @@ import {
   CONNECT_WALLET,
   CONNECT_WALLET_ERROR,
   CONNECT_WALLET_SUCCESS,
+  MINT_PUNK,
+  MINT_PUNK_SUCCESS,
+  MINT_PUNK_ERROR,
   GET_MINTED_PUNKS,
+  GET_MINTED_PUNKS_SUCCESS,
 } from './punksType'
 
 const checkIfWalletIsConnected = () => async (dispatch) => {
@@ -60,12 +64,46 @@ const connectWallet = () => async (dispatch) => {
   }
 }
 
-const getMintedPunks = (punks) => (dispatch) => {
-  console.log(punks)
+const getMintedPunks = () => (dispatch) => {
   dispatch({
     type: GET_MINTED_PUNKS,
+  })
+}
+
+const successMintedPunks = (punks) => (dispatch) => {
+  console.log(punks)
+  dispatch({
+    type: GET_MINTED_PUNKS_SUCCESS,
     payload: punks,
   })
 }
 
-export { checkIfWalletIsConnected, connectWallet, getMintedPunks }
+const setIsMinting = () => (dispatch) => {
+  dispatch({
+    type: MINT_PUNK,
+  })
+}
+
+const errorMinting = (message) => (dispatch) => {
+  dispatch({
+    type: MINT_PUNK_ERROR,
+    payload: message,
+  })
+}
+
+const successMinting = (message) => (dispatch) => {
+  dispatch({
+    type: MINT_PUNK_SUCCESS,
+    payload: message,
+  })
+}
+
+export {
+  checkIfWalletIsConnected,
+  connectWallet,
+  getMintedPunks,
+  setIsMinting,
+  errorMinting,
+  successMinting,
+  successMintedPunks,
+}
