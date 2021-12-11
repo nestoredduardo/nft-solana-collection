@@ -371,7 +371,7 @@ const CandyMachine = ({
 
   return (
     <VStack className="machine-container">
-      <HStack>
+      <HStack mt="2">
         {user ? (
           <Box
             as="button"

@@ -4,8 +4,14 @@
 }
 
 .gif-container {
+  min-height: calc(100vh - 148px);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
+}
+
+.min-h {
+  min-height: calc(100vh - 160px);
 }
 
 .gif-grid {

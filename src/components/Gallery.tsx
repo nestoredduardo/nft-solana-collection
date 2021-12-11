@@ -1,8 +1,9 @@
+import { Box } from '@chakra-ui/react'
 import { connect } from 'react-redux'
 
-const Gallery = ({ mintedPunks }) => {
+const Gallery = ({ mintedPunks, loadingPunks }) => {
   return (
-    <div className="gif-container">
+    <Box className="gif-container">
       <p className="sub-text">Minted Items ✨</p>
       <div className="gif-grid">
         {mintedPunks.map((mint) => (
@@ -11,12 +12,12 @@ const Gallery = ({ mintedPunks }) => {
           </div>
         ))}
       </div>
-    </div>
+    </Box>
   )
 }
 
-const mapStateToProps = ({ mintedPunks }) => {
-  return { mintedPunks }
+const mapStateToProps = ({ mintedPunks, loadingPunks }) => {
+  return { mintedPunks, loadingPunks }
 }
 
 export default connect(mapStateToProps, null)(Gallery)
