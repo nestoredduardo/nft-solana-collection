@@ -3,13 +3,21 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { Program, Provider, web3 } from '@project-serum/anchor'
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token'
 import { programs } from '@metaplex/js'
+
+//Redux
+import { connect } from 'react-redux'
+import { connectWallet, getMintedPunks } from '../redux/punks/punksActions'
+
 import './CandyMachine.css'
 import {
   candyMachineProgram,
   TOKEN_METADATA_PROGRAM_ID,
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
 } from './helpers'
-import { Button } from '@chakra-ui/react'
+
+import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/layout'
+
 const {
   metadata: { Metadata, MetadataProgram },
 } = programs
@@ -25,7 +33,12 @@ const MAX_URI_LENGTH = 200
 const MAX_SYMBOL_LENGTH = 10
 const MAX_CREATOR_LEN = 32 + 1 + 1
 
-const CandyMachine = ({ walletAddress }) => {
+const CandyMachine = ({
+  walletAddress,
+  user,
+  connectWallet,
+  getMintedPunks,
+}) => {
   // Actions
   const fetchHashTable = async (hash, metadataEnabled) => {
     const connection = new web3.Connection(
@@ -252,6 +265,7 @@ const CandyMachine = ({ walletAddress }) => {
   }
 
   const [machineStats, setMachineStats] = useState(null)
+  const [mints, setMints] = useState([])
 
   useEffect(() => {
     getCandyMachineState()
@@ -314,19 +328,84 @@ const CandyMachine = ({ walletAddress }) => {
       goLiveData,
       goLiveDateTimeString,
     })
+
+    const data = await fetchHashTable(
+      process.env.REACT_APP_CANDY_MACHINE_ID,
+      true
+    )
+
+    if (data.length !== 0) {
+      for (const mint of data) {
+        // Get URI
+        const response = await fetch(mint.data.uri)
+        const parse = await response.json()
+        console.log('Past Minted NFT', mint)
+
+        // Get image URI
+        if (!mints.find((mint) => mint === parse.image)) {
+          setMints((prevState) => [...prevState, parse.image])
+        }
+      }
+      getMintedPunks(mints)
+    }
   }
 
   return (
-    <div className="machine-container">
+    <VStack className="machine-container">
+      <HStack>
+        {user ? (
+          <Box
+            as="button"
+            color="white"
+            className="cta-button mint-button"
+            _hover={{ opacity: '0.5' }}
+            _active={{
+              bg: '#dddfe2',
+              borderColor: '#bec3c9',
+            }}
+            onClick={mintToken}
+          >
+            Obtén tu Candy Punk
+          </Box>
+        ) : (
+          <Box
+            as="button"
+            bgGradient="linear(to-l, #ff8867, #ff52ff)"
+            className="connect-wallet-button"
+            color="white"
+            ml="auto"
+            p="2"
+            fontWeight="semibold"
+            borderRadius="10"
+            onClick={connectWallet}
+            _hover={{ opacity: '0.5' }}
+            _active={{
+              bg: '#dddfe2',
+              transform: 'scale(0.98)',
+              borderColor: '#bec3c9',
+            }}
+          >
+            Conecta tu Phantom Wallet
+          </Box>
+        )}
+
+        <Button>Galería</Button>
+      </HStack>
+
       {machineStats && (
         <p>{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}</p>
       )}
-
-      <Button className="cta-button mint-button" onClick={mintToken}>
-        Mint NFT
-      </Button>
-    </div>
+    </VStack>
   )
 }
 
-export default CandyMachine
+const mapStateToProps = ({ walletAddress }) => {
+  return { user: walletAddress }
+}
+
+const mapDispatchToProps = {
+  connectWallet,
+  getMintedPunks,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CandyMachine)

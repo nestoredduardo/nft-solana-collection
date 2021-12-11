@@ -5,7 +5,6 @@ import {
   MenuItem,
   IconButton,
   Flex,
-  Button,
   Text,
 } from '@chakra-ui/react'
 import { Badge, Box } from '@chakra-ui/layout'

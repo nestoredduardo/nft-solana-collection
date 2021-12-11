@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from '@chakra-ui/layout'
+import { HStack, Text, VStack, Box } from '@chakra-ui/layout'
 import { Badge, Flex, Image, Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
@@ -17,12 +17,13 @@ const Main = ({ checkIfWalletIsConnected, walletAddress }) => {
     const onLoad = async () => {
       checkIfWalletIsConnected()
     }
+
     window.addEventListener('load', onLoad)
     return () => window.removeEventListener('load', onLoad)
   }, [])
 
   return (
-    <VStack>
+    <VStack mb="9">
       <Flex align="center" direction="column" mt="20">
         <Image
           boxSize="264px"
@@ -41,21 +42,21 @@ const Main = ({ checkIfWalletIsConnected, walletAddress }) => {
         )}
       </Flex>
       <VStack>
-        <Text>Dispensador del Punks NFTs para que Nunca pares de aprender</Text>
-        <Text>
+        <Flex direction="column" w="full" px="6" mb="4" fontSize="2xl">
+          <VStack spacing="-2" align="start">
+            <Text fontWeight="semibold">Dispensador de Punks NFTs</Text>
+            <Text fontWeight="semibold" color="teal.400">
+              que no paran de aprender
+            </Text>
+          </VStack>
+        </Flex>
+        <Text px="6" color="gray.500" lineHeight="6" pb="4">
           Candy Punks es una colección de Avatares randomizados cuya metadata es
           almacenada en la red de Solana. Poseen características únicas y sólo
-          hay 100 en existencia.
-        </Text>
-        <Text>
-          Cada Candy Punk se genera de forma secuencial basado en tu address,
-          usa el previsualizador para averiguar cuál sería tu Platzi Punk si
-          minteas en este momento
+          hay 21 en existencia.
         </Text>
         <HStack>
-          {walletAddress && <CandyMachine walletAddress={window.solana} />}
-          <Button>Obtén tu Candy Punk</Button>
-          <Button>Galería</Button>
+          <CandyMachine walletAddress={window.solana} />
         </HStack>
       </VStack>
     </VStack>

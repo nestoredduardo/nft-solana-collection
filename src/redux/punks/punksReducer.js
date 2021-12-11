@@ -5,12 +5,14 @@ import {
   CONNECT_WALLET,
   CONNECT_WALLET_ERROR,
   CONNECT_WALLET_SUCCESS,
+  GET_MINTED_PUNKS,
 } from './punksType'
 
 const initialState = {
   walletAddress: '',
   connecting: false,
   errorConnecting: false,
+  mintedPunks: [],
 }
 
 const reducer = (state = initialState, action) => {
@@ -27,6 +29,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, connecting: false, walletAddress: action.payload }
     case CONNECT_WALLET_ERROR:
       return { ...state, connecting: false, errorConnecting: true }
+    case GET_MINTED_PUNKS:
+      return { ...state, mintedPunks: action.payload }
     default:
       return state
   }

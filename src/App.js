@@ -1,22 +1,24 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import Header from './components/Header';
-import Main from './components/Main';
-import Footer from './components/Footer';
+import './App.css'
 
-// Constants
-const TWITTER_HANDLE = '_buildspace';
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+import Header from './components/Header'
+import Main from './components/Main'
+import Footer from './components/Footer'
+import Gallery from './components/Gallery'
 
 const App = () => {
   return (
-    <>
+    <BrowserRouter>
       <Header />
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/gallery" element={<Gallery />} />
+      </Routes>
       <Footer />
-    </>
-  );
-};
+    </BrowserRouter>
+  )
+}
 
-export default App;
+export default App

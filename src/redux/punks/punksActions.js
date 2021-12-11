@@ -5,6 +5,7 @@ import {
   CONNECT_WALLET,
   CONNECT_WALLET_ERROR,
   CONNECT_WALLET_SUCCESS,
+  GET_MINTED_PUNKS,
 } from './punksType'
 
 const checkIfWalletIsConnected = () => async (dispatch) => {
@@ -59,4 +60,12 @@ const connectWallet = () => async (dispatch) => {
   }
 }
 
-export { checkIfWalletIsConnected, connectWallet }
+const getMintedPunks = (punks) => (dispatch) => {
+  console.log(punks)
+  dispatch({
+    type: GET_MINTED_PUNKS,
+    payload: punks,
+  })
+}
+
+export { checkIfWalletIsConnected, connectWallet, getMintedPunks }
