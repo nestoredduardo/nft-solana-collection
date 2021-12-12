@@ -1,5 +1,5 @@
-import { HStack, Text, VStack, Box } from '@chakra-ui/layout'
-import { Badge, Flex, Image, Button, Spinner } from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/layout'
+import { Badge, Flex, Image, Spinner } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
 

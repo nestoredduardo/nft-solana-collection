@@ -11,7 +11,7 @@
 }
 
 .min-h {
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 179px);
 }
 
 .gif-grid {
@@ -36,4 +36,11 @@
   height: 200px;
   border-radius: 10px;
   object-fit: cover;
+}
+
+@media screen and (min-width: 1024px) {
+  .gif-container {
+    margin: 0 auto;
+    width: 80%;
+  }
 }

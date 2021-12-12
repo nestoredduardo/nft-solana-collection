@@ -46,6 +46,7 @@ const CandyMachine = ({
   walletAddress,
   user,
   isMinting,
+  successMinting,
   connectWallet,
   getMintedPunks,
   successMintedPunks,

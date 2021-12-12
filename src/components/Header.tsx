@@ -19,8 +19,8 @@ const Header = ({ connectWallet, walletAddress }) => {
     <Flex
       justify="center"
       alignItems="center"
-      px="2"
       py="4"
+      px={{ base: '2', lg: '24' }}
       borderBottom="2px"
       borderColor="gray.200"
     >
@@ -40,13 +40,22 @@ const Header = ({ connectWallet, walletAddress }) => {
           </MenuItem>
         </MenuList>
       </Menu>
-      <Text ml="4" fontSize="1.2rem">
+      <Text ml="4" fontSize={{ base: '1.2rem', lg: '2rem' }}>
         🍭
       </Text>
-      <Text fontSize="1.2em" fontWeight="bold" color="teal.400" mr="1">
+      <Text
+        fontSize={{ base: '1.2rem', lg: '2rem' }}
+        fontWeight="bold"
+        color="teal.400"
+        mr="1"
+      >
         Candy
       </Text>
-      <Text fontSize="1.2em" fontWeight="bold" color="pink.400">
+      <Text
+        fontSize={{ base: '1.2rem', lg: '2rem' }}
+        fontWeight="bold"
+        color="pink.400"
+      >
         Punks
       </Text>
       {walletAddress ? (
